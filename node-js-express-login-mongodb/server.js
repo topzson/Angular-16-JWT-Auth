@@ -37,9 +37,10 @@ app.listen(PORT, () => {
 });
 
 const db = require("./app/models");
+const dbConfig = require("./app/config/db.config");
 const Role = db.role;
 db.mongoose
-    .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+    .connect(`${dbConfig.HOST}`, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })
