@@ -26,9 +26,13 @@ app.use(cookieSession({
 // simple route
 app.get("/", (req, res) => {
     res.json({
-        message: "Welcome to bezkoder application."
+        message: "Welcome to topzson application."
     });
 });
+
+// routes
+require('./app/routes/auth.routes')(app);
+require('./app/routes/user.routes')(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
@@ -40,18 +44,18 @@ const db = require("./app/models");
 const dbConfig = require("./app/config/db.config");
 const Role = db.role;
 db.mongoose
-    .connect(`${dbConfig.HOST}`, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    })
+    .connect(`${dbConfig.HOST}`)
     .then(() => {
         console.log("Successfully connect to MongoDB.");
         initial();
+        
     })
     .catch(err => {
         console.error("Connection error", err);
         process.exit();
     });
+
+
 
 function initial() {
     Role.estimatedDocumentCount((err, count) => {
