@@ -1,18 +1,25 @@
-import { HTTP_INTERCEPTORS, HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable, throwError } from "rxjs";
-import { catchError, switchMap } from 'rxjs/operators';
+import { HTTP_INTERCEPTORS, HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
 import { AuthService } from '../_services/auth.service';
 import { StorageService } from '../_services/storage.service';
+
+import { Observable, throwError } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
+
 import { EventBusService } from '../_shared/event-bus.service';
 import { EventData } from '../_shared/event.class';
+
 @Injectable()
 export class HttpRequestInterceptor implements HttpInterceptor {
   private isRefreshing = false;
+
   constructor(
     private storageService: StorageService,
     private authService: AuthService,
-    private eventBusService: EventBusService){}
+    private eventBusService: EventBusService
+  ) {}
+
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     req = req.clone({
       withCredentials: true,
@@ -60,7 +67,6 @@ export class HttpRequestInterceptor implements HttpInterceptor {
     return next.handle(request);
   }
 }
-
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true },

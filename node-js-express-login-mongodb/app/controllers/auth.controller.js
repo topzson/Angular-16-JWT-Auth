@@ -1,4 +1,5 @@
-const config = require("../config/auth.config");
+const config = require("../config/auth.config.js");
+require("dotenv").config();
 const db = require("../models");
 const {
     user: User,
@@ -6,8 +7,8 @@ const {
     refreshToken: RefreshToken
 } = db;
 
-var jwt = require("jsonwebtoken");
-var bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
     const user = new User({
@@ -108,15 +109,12 @@ exports.signin = (req, res) => {
 
             if (!passwordIsValid) {
                 return res.status(401).send({
-                    message: "Invalid Password!"
+                    accessToken: null,
+                    message: "Invalid Password!",
                 });
             }
 
-            let token = jwt.sign({
-                id: user.id
-            }, config.secret, {
-                expiresIn: config.jwtExpiration, // 24 hours
-            });
+            const token = jwt.sign({id: user.id}, config.secret, {expiresIn: config.jwtExpiration});
 
             let refreshToken = await RefreshToken.createToken(user);
 
@@ -125,8 +123,6 @@ exports.signin = (req, res) => {
             for (let i = 0; i < user.roles.length; i++) {
                 authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
             }
-
-
             res.status(200).send({
                 id: user._id,
                 username: user.username,

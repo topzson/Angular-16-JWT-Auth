@@ -1,5 +1,5 @@
-module.export = {
-    secret:"topzson-secret-key",
+module.exports = {
+    secret:'topzsonsecretkey',
     // jwtExpiration: 3600,
     // jwtRefreshExpiration:86400,
 
