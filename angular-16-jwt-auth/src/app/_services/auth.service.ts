@@ -15,6 +15,10 @@ const httpOptions = {
 export class AuthService {
 
   constructor(private http: HttpClient) { }
+  
+  refreshToken() {
+    return this.http.post(AUTH_API + 'refreshtoken', { }, httpOptions);
+  }
 
   login(username: string, password: string): Observable<any>{
     return this.http.post(
